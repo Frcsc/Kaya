@@ -1,0 +1,17 @@
+.env
+.DS_Store
+__pycache__
+.git
+
+.vscode/
+
+media/
+
+
+# Pre-commit
+.flake8
+.gitignore
+.pre-commit-config.yaml
+isort.cfg
+README.md
+spectral.yaml

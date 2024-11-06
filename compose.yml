@@ -1,0 +1,26 @@
+# NOTE: This docker-compose.yml file is meant for development use, not for production
+services:
+  db:
+    container_name: kaya-postgres
+    image: postgres:15-alpine
+    environment:
+      POSTGRES_USER: kaya
+      POSTGRES_PASSWORD: kaya
+      POSTGRES_DB: kaya
+
+  django:
+    container_name: kaya-server
+    build:
+      context: .
+      dockerfile: Dockerfile
+    volumes:
+      - .:/kaya
+    ports:
+      - "8000:8000"
+    depends_on:
+      - db
+    environment:
+      DB_HOST: "db"
+      DB_PASS: kaya
+    stdin_open: true
+    tty: true
