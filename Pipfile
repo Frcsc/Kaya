@@ -12,6 +12,7 @@ pillow = "*"
 djangorestframework = "*"
 django-import-export = "*"
 django-filter = "*"
+pandas = "*"
 
 [dev-packages]
 black = "==22.3.0"

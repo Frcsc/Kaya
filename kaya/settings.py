@@ -45,6 +45,7 @@ INSTALLED_APPS = [
     "campaign",
     "ad_group",
     "ad_group_stats",
+    "seeding",
 ]
 
 MIDDLEWARE = [
