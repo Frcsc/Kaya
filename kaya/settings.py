@@ -43,6 +43,8 @@ INSTALLED_APPS = [
     "django_filters",
     "import_export",
     "campaign",
+    "ad_group",
+    "ad_group_stats",
 ]
 
 MIDDLEWARE = [
