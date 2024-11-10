@@ -10,7 +10,7 @@ from campaign.models import Campaign
 logger = logging.getLogger(__name__)
 
 
-FILE_PATH = os.path.join(settings.BASE_DIR, 'campaign', 'seed.csv')
+FILE_PATH = os.path.join(settings.BASE_DIR, 'seeding', 'csv', 'campaign.csv')
 
 
 class SeedCampaignTable:

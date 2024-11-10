@@ -10,9 +10,13 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/4.1/ref/settings/
 """
 
+from datetime import timedelta
 from pathlib import Path
 
 from decouple import Csv, config
+from rest_framework.settings import ISO_8601
+
+from kaya.logging import logging_setup
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -40,19 +44,21 @@ INSTALLED_APPS = [
     "django.contrib.messages",
     "django.contrib.staticfiles",
     "rest_framework",
+    "knox",
     "django_filters",
     "import_export",
     "campaign",
     "ad_group",
     "ad_group_stats",
     "seeding",
+    'user',
+    'api',
 ]
 
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
     "django.middleware.common.CommonMiddleware",
-    "django.middleware.csrf.CsrfViewMiddleware",
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
@@ -78,6 +84,9 @@ TEMPLATES = [
 
 
 WSGI_APPLICATION = "kaya.wsgi.application"
+
+
+AUTH_USER_MODEL = 'user.User'
 
 
 # Database
@@ -112,6 +121,25 @@ AUTH_PASSWORD_VALIDATORS = [
         "NAME": "django.contrib.auth.password_validation.NumericPasswordValidator",
     },
 ]
+
+
+# REST framework
+REST_FRAMEWORK = {
+    'COERCE_DECIMAL_TO_STRING': False,
+    'DEFAULT_AUTHENTICATION_CLASSES': ('knox.auth.TokenAuthentication',),
+    'DEFAULT_FILTER_BACKENDS': ('django_filters.rest_framework.DjangoFilterBackend',),
+}
+
+TOKEN_TTL_HOURS = config('TOKEN_TTL_HOURS', default=7, cast=int)
+
+REST_KNOX = {
+    'SECURE_HASH_ALGORITHM': 'hashlib.sha512',
+    'AUTH_TOKEN_CHARACTER_LENGTH': 64,
+    'TOKEN_TTL': timedelta(days=TOKEN_TTL_HOURS),
+    'TOKEN_LIMIT_PER_USER': None,
+    'AUTO_REFRESH': True,
+    'EXPIRY_DATETIME_FORMAT': ISO_8601,
+}
 
 
 # Internationalization
@@ -157,3 +185,8 @@ SERVER_EMAIL = config('SERVER_EMAIL', default="")
 
 # List of admin emails that'll receive traceback emails from production
 ADMINS = [("admin", i) for i in config('ADMINS', default="").split(",")]
+
+
+# Watch Tower Logging For Production on AWS
+if DEBUG is False:
+    LOGGING = logging_setup()

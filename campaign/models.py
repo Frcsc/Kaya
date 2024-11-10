@@ -14,3 +14,7 @@ class Campaign(BaseModel):
 
     def __str__(self):
         return self.campaign_name
+
+    @property
+    def number_of_ad_groups(self):
+        return self.adgroup_set.count()

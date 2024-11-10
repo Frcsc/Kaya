@@ -2,9 +2,9 @@ import logging
 
 from django.core.management.base import BaseCommand
 
-from ad_group.mixins import SeedAdGroupTable
-from ad_group_stats.mixins import SeedAdGroupStatTable
-from campaign.mixins import SeedCampaignTable
+from seeding.ad_group import SeedAdGroupTable
+from seeding.ad_group_stats import SeedAdGroupStatTable
+from seeding.campaign import SeedCampaignTable
 from seeding.models import SeedTracker
 
 logger = logging.getLogger(__name__)
