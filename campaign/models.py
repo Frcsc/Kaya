@@ -1,5 +1,6 @@
 from django.db import models
 
+from ad_group_stats.utils import quantize_two_decimal_places
 from kaya.models import BaseModel
 
 
@@ -18,3 +19,19 @@ class Campaign(BaseModel):
     @property
     def number_of_ad_groups(self):
         return self.adgroup_set.count()
+
+    @property
+    def average_monthly_cost(self):
+        total_cost = sum(
+            adgroup.average_monthly_cost for adgroup in self.adgroup_set.all()
+        )
+        return quantize_two_decimal_places(total_cost)
+
+    @property
+    def cost_per_conversion(self):
+
+        total_cost = sum(
+            adgroup.cost_per_conversion for adgroup in self.adgroup_set.all()
+        )
+
+        return quantize_two_decimal_places(total_cost)

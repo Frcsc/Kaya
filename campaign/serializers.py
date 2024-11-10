@@ -12,6 +12,8 @@ class CampaignSerializer(serializers.ModelSerializer):
             'campaign_name',
             'campaign_type',
             'number_of_ad_groups',
+            'average_monthly_cost',
+            'cost_per_conversion',
             'ad_groups',
         )
 
@@ -22,7 +24,7 @@ class CampaignSerializer(serializers.ModelSerializer):
                 'ad_group_id',
                 'ad_group_name',
                 'average_monthly_cost',
-                'average_monthly_conversions',
+                'cost_per_conversion',
             )
 
     ad_groups = AdGroupSerializer(source='adgroup_set', many=True)
