@@ -19,27 +19,32 @@ This mode requires the following dependencies, so first install them on your sys
 
 1. Build Docker Image
 
-```docker compose build
+```
+docker compose build
 ```
 
 2. Apply database migrations
 
-```docker compose run django python manage.py migrate
+```
+docker compose run django python manage.py migrate
 ```
 
 3. Add seed data to the database
 
-```docker compose run django python manage.py seed_db
+```
+docker compose run django python manage.py seed_db
 ```
 
 4. Run unit test
 
-```docker compose run django python manage.py test
+```
+docker compose run django python manage.py test
 ```
 
 5. Star docker container (Note: this run use port 8000 by default)
 
-```docker compose up
+```
+docker compose up
 ```
 
 ### Native Development Quick Start
@@ -57,12 +62,14 @@ This mode requires the following dependencies, so first install them on your sys
 
 2. Apply database migrations
 
-```pipenv run ./manage.py migrate
+```
+pipenv run ./manage.py migrate
 ```
 
 3. Add seed data to the database
 
-```pipenv run ./manage.py seed_db
+```
+pipenv run ./manage.py seed_db
 ```
 
 3. Run unit test
@@ -72,7 +79,8 @@ This mode requires the following dependencies, so first install them on your sys
 
 4. Start development server (Note: this run use port 8000 by default)
 
-```pipenv run ./manage.py runserver
+```
+pipenv run ./manage.py runserver
 ```
 
 ### Pre-commit setup (Optional but highly recommended. The CI/CD will run it when PRs are made or when changes are pushed to a branch that runs Github actions)
@@ -86,12 +94,14 @@ Developers should run `pre-commit run --all-files` to check their code quality b
 
 2. Setup pre-commit in git repo
 
-```pre-commit install
+```
+pre-commit install
 ```
 
 3. Run pre-commit in all file
 
-```pre-commit run --all-files
+```
+pre-commit run --all-files
 ```
 
 ## Assumptions
@@ -132,14 +142,16 @@ Create an admin user with the command below and answer the prompt questions (`em
 
 - Create admin user with `Native development`
 
-```pipenv run ./manage.py createsuperuser
+```
+pipenv run ./manage.py createsuperuser
 ```
 
 `OR`
 
 - Create admin user with `Docker development`
 
-```docker compose run django python manage.py createsuperuser
+```
+docker compose run django python manage.py createsuperuser
 ```
 
 ## Reference
