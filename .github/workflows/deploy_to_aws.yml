@@ -1,0 +1,85 @@
+name: Build and Deploy
+
+on:
+  push:
+    branches:
+      - main
+
+  workflow_run:
+    workflows: ["Code Quality Tests"]
+    types:
+      - completed
+
+env:
+  AWS_REGION: ap-southeast-1 # Move this to aws secrets if the region will change
+  IMAGE_NAME: kaya_docker_image
+
+permissions:
+  contents: read
+
+jobs:
+  ci:
+    uses: ./.github/workflows/ci.yml
+    secrets: inherit
+
+  deploy:
+    name: Deploy
+    runs-on: ubuntu-latest
+    needs: ci
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Test Deploy Step
+        run: echo "Testing workflow chaining. Deployment step triggered."
+
+    # - name: Configure AWS credentials
+    #   uses: aws-actions/configure-aws-credentials@v4.0.2
+    #   with:
+    #     aws-access-key-id: ${{ secrets.ACCESS_KEY_ID }}
+    #     aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+    #     aws-region: ${{ env.AWS_REGION }}
+
+    # - name: Download task definition
+    #   run: |
+    #     aws ecs describe-task-definition --task-definition kayaTaskDefinitions --query taskDefinition > task-definition.json
+
+    # - name: Login to Amazon ECR
+    #   id: login-ecr
+    #   uses: aws-actions/amazon-ecr-login@v2.0.1
+
+    # - name: create entrypoint
+    #   run: |
+    #     echo "#!/bin/bash" > entrypoint.sh
+    #     echo "" >> entrypoint.sh
+    #     echo "python manage.py migrate" >> entrypoint.sh
+    #     echo "" >> entrypoint.sh
+    #     echo "exec gunicorn kaya.wsgi:application --bind 0.0.0.0:8000 --workers 2 &" >> entrypoint.sh
+    #     echo "" >> entrypoint.sh
+
+    # - name: Build, tag, and push image to Amazon ECR
+    #   id: build-image
+    #   env:
+    #     ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
+    #     IMAGE_TAG: ${{ github.sha }}
+    #   run: |
+    #     docker build -t $ECR_REGISTRY/$IMAGE_NAME:$IMAGE_TAG .
+    #     docker push $ECR_REGISTRY/$IMAGE_NAME:$IMAGE_TAG
+    #     echo "image=$ECR_REGISTRY/$IMAGE_NAME:$IMAGE_TAG" >> $GITHUB_OUTPUT
+
+    # - name: Fill in the new image ID in the Amazon ECS task definition
+    #   id: task-def
+    #   uses: aws-actions/amazon-ecs-render-task-definition@v1
+    #   with:
+    #     task-definition: task-definition.json
+    #     container-name: kayaContainer
+    #     image: ${{ steps.build-image.outputs.image }}
+
+    # - name: Deploy Amazon ECS task definition
+    #   id: deploy-to-ecs
+    #   uses: aws-actions/amazon-ecs-deploy-task-definition@v1
+    #   with:
+    #     task-definition: ${{ steps.task-def.outputs.task-definition }}
+    #     service: kaya
+    #     cluster: kayaCluster
+    #     wait-for-service-stability: true

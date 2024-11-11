@@ -12,7 +12,7 @@ services:
     container_name: kaya-server
     build:
       context: .
-      dockerfile: Dockerfile
+      dockerfile: dev.Dockerfile
     volumes:
       - .:/kaya
     ports:

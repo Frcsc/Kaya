@@ -1,0 +1,66 @@
+name: Code Quality Tests
+on:
+  workflow_call:
+
+jobs:
+  test:
+    name: Run pre-commit and tests
+    runs-on: ubuntu-latest
+
+    services:
+      postgres:
+        image: postgres:15-alpine
+        env:
+          POSTGRES_DB: kaya
+          POSTGRES_USER: kaya
+          POSTGRES_PASSWORD: postgres
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+        ports:
+          - 5432:5432
+
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v4.1.1
+
+    - name: Set up Python
+      uses: actions/setup-python@v5
+      with:
+        python-version: '3.10'
+        cache: 'pipenv'
+
+    - name: Install system dependencies
+      run: sudo apt-get update && sudo apt-get install -y curl libcurl4-openssl-dev build-essential libssl-dev
+
+    - name: Install pipenv
+      run: curl https://raw.githubusercontent.com/pypa/pipenv/master/get-pipenv.py | python
+
+    - name: Install dependencies
+      run: pipenv sync --dev
+
+    - name: Create .env
+      run: |
+        echo "SECRET_KEY=some_string_" >> .env
+        echo "DEBUG=True" >> .env
+        echo "ALLOWED_HOSTS=*" >> .env
+        echo "DB_HOST=localhost" >> .env
+        echo "DB_PORT=5432" >> .env
+        echo "DB_NAME=kaya" >> .env
+        echo "DB_USER=kaya" >> .env
+        echo "DB_PASS=postgres" >> .env
+
+    - name: Run pre-commit
+      run: pipenv run pre-commit run --all-files
+
+    - name: Run Django tests
+      run: pipenv run python manage.py test -v 2
+      env:
+        DJANGO_SETTINGS_MODULE: kaya.settings
+        DB_HOST: localhost
+        DB_PORT: 5432
+        DB_NAME: kaya
+        DB_USER: kaya
+        DB_PASS: postgres
