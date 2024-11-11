@@ -31,5 +31,5 @@ class CampaignPatchAPIView(AllowAnyPermission, APIView):
         serializer.save()
         return Response(
             {"message": "Successful", "data": serializer.data},
-            status=status.HTTP_404_NOT_FOUND,
+            status=status.HTTP_200_OK,
         )
