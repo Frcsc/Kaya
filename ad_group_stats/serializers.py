@@ -47,10 +47,10 @@ class CompareBaseSerializer(serializers.Serializer):
 
 class CompareDecimalBaseSerializer(CompareBaseSerializer):
     current = serializers.DecimalField(
-        max_digits=22, decimal_places=4, required=False, allow_null=True
+        max_digits=22, decimal_places=2, required=False, allow_null=True
     )
     previous = serializers.DecimalField(
-        max_digits=22, decimal_places=4, required=False, allow_null=True
+        max_digits=22, decimal_places=2, required=False, allow_null=True
     )
 
 
