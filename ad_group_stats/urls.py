@@ -11,7 +11,7 @@ urlpatterns = [
     path(
         'performance-time-series',
         CampaignPerformanceListView.as_view(),
-        name="performance-time-series",
+        name="performance",
     ),
     path(
         'compare-performance',

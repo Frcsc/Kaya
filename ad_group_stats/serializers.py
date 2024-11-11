@@ -9,9 +9,9 @@ logger = logging.getLogger(__name__)
 
 
 class PerformanceTimeSeriesSerializer(serializers.Serializer):
-    total_cost = serializers.DecimalField(max_digits=22, decimal_places=4)
+    total_cost = serializers.DecimalField(max_digits=22, decimal_places=2)
     total_clicks = serializers.IntegerField()
-    total_conversions = serializers.DecimalField(max_digits=22, decimal_places=4)
+    total_conversions = serializers.DecimalField(max_digits=22, decimal_places=2)
     average_cost_per_click = serializers.DecimalField(
         max_digits=22, decimal_places=2, required=False, allow_null=True
     )
@@ -19,10 +19,10 @@ class PerformanceTimeSeriesSerializer(serializers.Serializer):
         max_digits=22, decimal_places=2, required=False, allow_null=True
     )
     average_click_through_rate = serializers.DecimalField(
-        max_digits=22, decimal_places=4, required=False, allow_null=True
+        max_digits=22, decimal_places=2, required=False, allow_null=True
     )
     average_conversion_rate = serializers.DecimalField(
-        max_digits=22, decimal_places=4, required=False, allow_null=True
+        max_digits=22, decimal_places=2, required=False, allow_null=True
     )
 
 

@@ -3,11 +3,8 @@ from django.urls import reverse
 from rest_framework import status
 from rest_framework.test import APITestCase
 
-from ad_group.tests.factories import AdGroupFactory
-from ad_group_stats.tests.factories import AdGroupStatFactory
-from campaign.models import Campaign
 from campaign.tests.factories import CampaignFactory
-from kaya.factories import FuzzyIntger, FuzzyText
+from kaya.factories import FuzzyText
 
 
 class CampaignPatchTestCase(APITestCase):
