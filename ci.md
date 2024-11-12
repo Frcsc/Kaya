@@ -1,6 +1,6 @@
 # CI
 
-There's a `.github/workflows` folder in the root directory. The folder contains `ci.yml and cd.yml` files used for integration and testing respectively.
+There's a `.github/workflows` folder in the root directory. The folder contains `ci.yml and cd.yml` files used for integration, testing and deployment.
 These two files are chained as `cd.yml` depends on the successful completion of `ci.yml`
 
 Here is a breakdown of key points in the `ci.yml` file.
