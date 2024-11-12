@@ -35,7 +35,7 @@ docker compose run django python manage.py migrate
 docker compose run django python manage.py seed_db
 ```
 
-4. Star docker container (Note: this run use port 8000 by default)
+4. Star docker container (Note: django dev server will use port 8000 by default)
 
 ```
 docker compose up
@@ -67,7 +67,7 @@ pipenv run ./manage.py migrate
 pipenv run ./manage.py seed_db
 ```
 
-4. Start development server (Note: this run use port 8000 by default)
+4. Start development server (Note: django dev server will use port 8000 by default)
 
 ```
 pipenv run ./manage.py runserver
