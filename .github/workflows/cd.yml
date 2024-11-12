@@ -28,10 +28,7 @@ jobs:
     needs: ci
     steps:
       - name: Checkout code
-        uses: actions/checkout@v2
-
-      - name: Test Deploy Step
-        run: echo "Testing workflow chaining. Deployment step triggered."
+        uses: actions/checkout@v4.1.1
 
     # - name: Configure AWS credentials
     #   uses: aws-actions/configure-aws-credentials@v4.0.2
