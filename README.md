@@ -1,12 +1,12 @@
 # Kaya Django Server
 
-This is a python based application that is intended to expose API endpoints for kaya. Django and Django REST framework (DRF) were used for this task. Django provides a custom command setup that can be extended to run custom commands and DRF is is a powerful and flexible toolkit for building APIs.
+This is a Python-based application intended to expose API endpoints for Kaya. Django and Django REST Framework (DRF) were used for this task. Django provides a setup for custom commands that can be extended to run various tasks, and DRF is a powerful and flexible toolkit for building APIs.
 
 ## Application Setup
 
-Copy the contents of `dev-example.env` and past them in a new file called `.env` in the root directory. The root directory is where `Pipfile.lock` and `Pipfile` are located.
+Copy the contents of `dev-example.env` and paste them in a new file called `.env` in the root directory. The root directory is where `Pipfile.lock` and `Pipfile` are located.
 
-## Build and run the application with Docker or Native
+## Build and Run the Application with Docker or Natively
 
 First, make sure you are in the root directory.
 
@@ -17,25 +17,25 @@ This mode requires the following dependencies, so first install them on your sys
 - Docker
 - Docker compose
 
-1. Build Docker Image
+1. Build Docker Image:
 
 ```
 docker compose build
 ```
 
-2. Apply database migrations
+2. Apply database migrations:
 
 ```
 docker compose run django python manage.py migrate
 ```
 
-3. Add seed data to the database
+3. Add seed data to the database:
 
 ```
 docker compose run django python manage.py seed_db
 ```
 
-4. Star docker container (Note: django dev server will use port 8000 by default)
+4. Star docker container (Note: django dev server will use port 8000 by default):
 
 ```
 docker compose up
@@ -49,47 +49,48 @@ This mode requires the following dependencies, so first install them on your sys
 - Pipenv
 - PostgreSQL 14 or compatible
 
-1. Set up the Python virtual environment, and download and install all the Python dependencies
+1. Set up the Python virtual environment, and download and install all the Python dependencies:
 
 ```
 pipenv sync
 ```
 
-2. Apply database migrations
+2. Apply database migrations:
 
 ```
 pipenv run ./manage.py migrate
 ```
 
-3. Add seed data to the database
+3. Add seed data to the database:
 
 ```
 pipenv run ./manage.py seed_db
 ```
 
-4. Start development server (Note: django dev server will use port 8000 by default)
+4. Start development server (Note: django dev server will use port 8000 by default):
 
 ```
 pipenv run ./manage.py runserver
 ```
 
-### Pre-commit setup (Optional but highly recommended. The CI/CD will run it when PRs are made or when changes are pushed to a branch that runs Github actions)
+### Pre-commit Setup (Optional but Recommended)
 
-Developers should run `pre-commit run --all-files` to check their code quality before pushing any changes to the repo.
+It’s recommended to run `pre-commit run --all-files` to check code quality before pushing any changes to the repo.
+CI/CD will also run it on pull requests or changes pushed to branches with GitHub Actions enabled.
 
-1. Install pre-commit
+1. Install pre-commit:
 
 ```
 pip install pre-commit
 ```
 
-2. Setup pre-commit in git repo
+2. Setup pre-commit in git repo:
 
 ```
 pre-commit install
 ```
 
-3. Run pre-commit in all file
+3. Run pre-commit in all file:
 
 ```
 pre-commit run --all-files
@@ -97,13 +98,13 @@ pre-commit run --all-files
 
 ## Assumptions
 
-- The data provided in the dataset can be used for database seeding.
+- The dataset provided can be used for database seeding.
 
-## Solution Explanations / steps
+## Solution Explanations / Steps
 
 ### Databse
 
-The data source provided was used to form the bases of Database table construction. Using Django's ORM three models where created.
+The provided data source was used as the basis for database table construction. Using Django's ORM, three models were created:
 
 - Campaign Model (Table):
   - campaign_id (chars, primary_key)
@@ -113,94 +114,91 @@ The data source provided was used to form the bases of Database table constructi
 - AdGroup Model (Table):
   - ad_group_id (chars, primary_key)
   - ad_group_name (chars)
-  - campaign(ForeignKey(campaignModel))
+  - campaign(ForeignKey to `Campaign`)
 
 - AdGroupStat Model (Table):
   - date (datetime)
-  - ad_group(ForeignKey(ad_groupModel))
+  - ad_group(ForeignKey to `AdGroup`)
   - device (chars, choices=[MOBILE, TABLET, DESKTOP])
   - impressions (int)
   - clicks (int)
   - conversions (decimal)
   - cost (decimal)
 
-### API endpoints
+### API Endpoints
 
-- Here are the 4 API endpoints, in order to access them the development server must be up and running.
+Here are the 4 API endpoints. To access them, the development server must be running.
 
-  - List of campaigns
+- List of campaigns:
 
-    ```
-    http://localhost:8000/api/campaign/v1/campaigns
-    ```
+  ```
+  http://0.0.0.0:8000/api/campaign/v1/campaigns
+  ```
 
-  - Patch campaign name. Assume `21358147155` is a valid campaign_id.
+- Patch campaign name (assuming 21358147155 is a valid campaign ID):
 
-    ```
-    http://localhost:8000/api/campaign/v1/campaign/21358147155
-    ```
+  ```
+  http://0.0.0.0:8000/api/campaign/v1/campaign/21358147155
+  ```
 
-  - Get performance time-series data.
+- Get performance time-series data:
 
-    ```
-    http://localhost:8000/api/ad-group-stats/v1/performance-time-series
-    ```
+  ```
+  http://0.0.0.0:8000/api/ad-group-stats/v1/performance-time-series
+  ```
 
-  - Get Performance comparison data.
+- Get performance comparison data:
 
-    ```
-    hhttp://localhost:8000/api/ad-group-stats/v1/compare-performance
-    ```
+  ```
+  http://0.0.0.0:8000/api/ad-group-stats/v1/compare-performance
+  ```
 
-- Key API development features and considerations.
+Key API development features and considerations.
 
-  - `POST /update-campaign` was changed to `Patch /campaign/<campaign_id>`. Patch is more standard for changing a single value of an instance. The name change is also more representative and for data changes, `update-campaign` is very discriptive which is not a good security practice in most cases. Finally, the API can simply be extend if there's a need for other API actions like `delete and retrieve`
+- `POST /update-campaign` was changed to `PATCH /campaign/<campaign_id>`. `PATCH` is more standard for updating a single field, and the name change is more descriptive while enhancing security. This endpoint can also be extended for other actions like `DELETE` or `RETRIEVE`.
 
-  - The API endpoints can be found in the project apps they belong to in a file called `api.py`.
+- API endpoints are organized within the respective project apps in a file called `api.py`.
 
-  - Every API has permissions. Currently the permissions are `public`. If there's a need for a user to be authenticatied and authorized to acess any API endpoint, the APIs can be easily adjusted.
+- All API endpoints have permissions set to `public`. If future endpoints require authentication, adjustments can be made to secure them.
 
-  - A version number was added to all the API paths. This is beneficial to track future application version changes. It could also be beneficial on a production, where we may need to run two different versions of the same API for different client application applications.
+- A version number (`v1`) is added to all API paths to facilitate tracking future API version changes. This approach may be beneficial in production, especially if different clients need different versions of the same API.
 
-  - A new app was added to manage potential user setup. A `register` and `login` APIs have be added as well.
+- A new app was added to manage user setup, including `register` and `login` API endpoints.
 
-### Unit Test
+### Unit Testing
 
-About 21 unit tests were added to over every aspect of the key API endpoints. Factory-boy (refer to refrences) library was used to generate random instances for test cases.
+Approximately 21 unit tests cover key API endpoints. The factory-boy library (see References) was used to generate random instances for test cases.
 
-- Run all test cases with `Native development`
-
-```
-pipenv run ./manage.py test
-```
-
-`OR`
-
-- Run all test cases with with `Docker development`
+- Run all test cases with Docker:
 
 ```
 docker compose run django python manage.py test
 ```
 
-### Admin Dashboard Web page
+- Run all test cases natively:
 
-Django comes with an inbuilt dashboard. You can create an admin user and navigate to `http://0.0.0.0:8000/admin` to view all the seed data on a dashboard.
+```
+pipenv run ./manage.py test
+```
 
-Create an admin user with the command below and answer the prompt questions (`email, password`) and proceed to the login on the admin page (`http://0.0.0.0:8000/admin`)
+### Admin Dashboard
 
-- Create admin user with `Native development`
+Django includes an inbuilt admin dashboard. You can create an admin user and access it at `http://0.0.0.0:8000/admin` to view all seeded data.
+
+Create an admin user with the following command, then proceed to the admin page at `http://0.0.0.0:8000/admin`:
+
+- Create an admin user with Docker:
+
+```
+docker compose run django python manage.py createsuperuser
+```
+
+- Create an admin user natively:
 
 ```
 pipenv run ./manage.py createsuperuser
 ```
 
-`OR`
-
-- Create admin user with `Docker development`
-
-```
-docker compose run django python manage.py createsuperuser
-```
 
 ## Reference
 
