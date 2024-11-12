@@ -183,9 +183,9 @@ pipenv run ./manage.py test
 
 ### Admin Dashboard
 
-Django includes an inbuilt admin dashboard. You can create an admin user and access it at `http://0.0.0.0:8000/admin` to view all seeded data.
+Django includes an inbuilt admin dashboard. You can create an admin user and view all seeded data.
 
-Create an admin user with the following command, then proceed to the admin page at `http://0.0.0.0:8000/admin`:
+Create an admin user with the following command:
 
 - Create an admin user with Docker:
 
@@ -199,6 +199,11 @@ docker compose run django python manage.py createsuperuser
 pipenv run ./manage.py createsuperuser
 ```
 
+After creating an admin user, access the admin panel on a brower with this URL:
+
+```
+http://0.0.0.0:8000/admin/
+```
 
 ## Reference
 
