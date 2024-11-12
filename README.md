@@ -35,13 +35,7 @@ docker compose run django python manage.py migrate
 docker compose run django python manage.py seed_db
 ```
 
-4. Run unit test
-
-```
-docker compose run django python manage.py test
-```
-
-5. Star docker container (Note: this run use port 8000 by default)
+4. Star docker container (Note: this run use port 8000 by default)
 
 ```
 docker compose up
@@ -70,11 +64,6 @@ pipenv run ./manage.py migrate
 
 ```
 pipenv run ./manage.py seed_db
-```
-
-3. Run unit test
-
-```pipenv run ./manage.py test
 ```
 
 4. Start development server (Note: this run use port 8000 by default)
@@ -106,7 +95,7 @@ pre-commit run --all-files
 
 ## Assumptions
 
-- The data provided in the dataset can be used for testing.
+- The data provided in the dataset can be used for database seeding.
 
 ## Solution Explanations / steps
 
@@ -120,19 +109,64 @@ The data source provided was used to form the bases of Database table constructi
 
 - AdGroupStat : `date, ad_group(ForeignKey), device, impressions, clicks, conversions, cost`.
 
+
 ### API endpoints
 
-Four key API endpoints were build as specified on the assignment page. Key adjust(s)
+- Here are the 4 API endpoints, in order to access them the development server must be up and running.
 
-- `POST /update-campaign` was changed to `Patch /campaign/<campaign_id>`. Patch is more standard for changing a single value of an instance. The name change is also more representative and for data changes, `update-campaign` is very discriptive which is not a good security practice in most cases. Finally, the API can simply be extend if there's a need for other API actions like `delete and retrieve`
+  - List of campaigns
 
-- The API endpoints can be found in the project apps they belong to in a file called `api.py`.
+    ```
+    http://localhost:8000/api/campaign/v1/campaigns
+    ```
 
-- Every API has permissions. Currently the permissions are `public`. If there's a need for a user to be authenticatied and authorized to acess any API endpoint, the APIs can be easily adjusted.
+  - Patch campaign name. Assume `21358147155` is a valid campaign_id.
 
-- A new app was added to manage potential user setup. A `register` and `login` APIs have be added as well.
+    ```
+    http://localhost:8000/api/campaign/v1/campaign/21358147155
+    ```
 
-- Unit tests were written for all the Four key API endpoins
+  - Get performance time-series data.
+
+    ```
+    http://localhost:8000/api/ad-group-stats/v1/performance-time-series
+    ```
+
+  - Get Performance comparison data.
+
+    ```
+    hhttp://localhost:8000/api/ad-group-stats/v1/compare-performance
+    ```
+
+- Four key API endpoints were build as specified on the assignment page. Key adjust(s).
+
+  - `POST /update-campaign` was changed to `Patch /campaign/<campaign_id>`. Patch is more standard for changing a single value of an instance. The name change is also more representative and for data changes, `update-campaign` is very discriptive which is not a good security practice in most cases. Finally, the API can simply be extend if there's a need for other API actions like `delete and retrieve`
+
+  - The API endpoints can be found in the project apps they belong to in a file called `api.py`.
+
+  - Every API has permissions. Currently the permissions are `public`. If there's a need for a user to be authenticatied and authorized to acess any API endpoint, the APIs can be easily adjusted.
+
+  - A version number was added to all the API paths. This is beneficial to track future application version changes. It could also be beneficial on a production, where we may need to run two different versions of the same API for different client application applications.
+
+  - A new app was added to manage potential user setup. A `register` and `login` APIs have be added as well.
+
+### Unit Test
+
+About 21 unit tests were added to over every aspect of the key API endpoints. Factory-boy (refer to refrences) library was used to generate random instances for test cases.
+
+- Run all test cases with `Native development`
+
+```
+pipenv run ./manage.py test
+```
+
+`OR`
+
+- Run all test cases with with `Docker development`
+
+```
+docker compose run django python manage.py test
+```
 
 ### Admin Dashboard Web page
 
