@@ -99,6 +99,7 @@ pre-commit run --all-files
 ## Assumptions
 
 - The dataset provided can be used for database seeding.
+- Database seeding command will be run once.
 
 ## Solution Explanations / Steps
 
