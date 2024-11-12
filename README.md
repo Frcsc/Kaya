@@ -79,7 +79,8 @@ Developers should run `pre-commit run --all-files` to check their code quality b
 
 1. Install pre-commit
 
-```pip install pre-commit
+```
+pip install pre-commit
 ```
 
 2. Setup pre-commit in git repo
@@ -104,12 +105,24 @@ pre-commit run --all-files
 
 The data source provided was used to form the bases of Database table construction. Using Django's ORM three models where created.
 
-- Campaign fields: `campaign_id, campaign_name, campaign_type` . These fields also represents colums in the postgres database
+- Campaign Model (Table):
+  - campaign_id (chars, primary_key)
+  - campaign_name (chars)
+  - campaign_type (chars, choices=[SEARCH_STANDARD, VIDEO_RESPONSIVE])
 
-- AdGroup fields: `ad_group_id, ad_group_name, campaign(ForeignKey)`.
+- AdGroup Model (Table):
+  - ad_group_id (chars, primary_key)
+  - ad_group_name (chars)
+  - campaign(ForeignKey(campaignModel))
 
-- AdGroupStat : `date, ad_group(ForeignKey), device, impressions, clicks, conversions, cost`.
-
+- AdGroupStat Model (Table):
+  - date (datetime)
+  - ad_group(ForeignKey(ad_groupModel))
+  - device (chars, choices=[MOBILE, TABLET, DESKTOP])
+  - impressions (int)
+  - clicks (int)
+  - conversions (decimal)
+  - cost (decimal)
 
 ### API endpoints
 
@@ -139,7 +152,7 @@ The data source provided was used to form the bases of Database table constructi
     hhttp://localhost:8000/api/ad-group-stats/v1/compare-performance
     ```
 
-- Four key API endpoints were build as specified on the assignment page. Key adjust(s).
+- Key API development features and considerations.
 
   - `POST /update-campaign` was changed to `Patch /campaign/<campaign_id>`. Patch is more standard for changing a single value of an instance. The name change is also more representative and for data changes, `update-campaign` is very discriptive which is not a good security practice in most cases. Finally, the API can simply be extend if there's a need for other API actions like `delete and retrieve`
 
