@@ -51,7 +51,8 @@ This mode requires the following dependencies, so first install them on your sys
 
 1. Set up the Python virtual environment, and download and install all the Python dependencies
 
-```pipenv sync
+```
+pipenv sync
 ```
 
 2. Apply database migrations
